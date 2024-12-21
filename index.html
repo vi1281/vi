@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login or Register</title>
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Login or Register</h1>
+    <form id="authForm">
+      <label for="email">Email:</label>
+      <input type="email" id="email" required>
+      <br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" required>
+      <br>
+      <button id="login" type="button">Login</button>
+      <button id="register" type="button">Register</button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { login, register } from './js/auth.js';
+
+    const loginButton = document.getElementById('login');
+    const registerButton = document.getElementById('register');
+
+    loginButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!email || !password) {
+        alert("Please enter both email and password.");
+        return;
+      }
+
+      try {
+        await login(email, password);
+        window.location.href = '/profile.html';
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      }
+    });
+
+    registerButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!email || !password) {
+        alert("Please enter both email and password.");
+        return;
+      }
+
+      try {
+        await register(email, password);
+        alert("Registration successful! You can now log in.");
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      }
+    });
+  </script>
+</body>
+</html>
