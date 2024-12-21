@@ -3,31 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login or Register</title>
-  <link rel="stylesheet" href="./css/styles.css">
+  <title>Firebase Login & Registration</title>
 </head>
 <body>
-  <div class="container">
-    <h1>Login or Register</h1>
-    <form id="authForm">
-      <label for="email">Email:</label>
-      <input type="email" id="email" required>
-      <br>
-      <label for="password">Password:</label>
-      <input type="password" id="password" required>
-      <br>
-      <button id="login" type="button">Login</button>
-      <button id="register" type="button">Register</button>
-    </form>
-  </div>
-
+  <h1>Login or Register</h1>
+  <form id="authForm">
+    <label for="email">Email:</label>
+    <input type="email" id="email" required>
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+    <br>
+    <button id="login" type="button">Login</button>
+    <button id="register" type="button">Register</button>
+  </form>
   <script type="module">
-    import { login, register } from './js/auth.js';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRhYwxR2O1zeQFZQf_A70Jf4zNESlBfPc",
+      authDomain: "dbase-a9d5a.firebaseapp.com",
+      projectId: "dbase-a9d5a",
+      storageBucket: "dbase-a9d5a.firebasestorage.app",
+      messagingSenderId: "16367447538",
+      appId: "1:16367447538:web:0eb42e275dbb4d2860cf6b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
     const loginButton = document.getElementById('login');
     const registerButton = document.getElementById('register');
 
-    loginButton.addEventListener("click", async (event) => {
+    loginButton.addEventListener("click", function (event) {
       event.preventDefault();
 
       const email = document.getElementById('email').value.trim();
@@ -38,15 +47,18 @@
         return;
       }
 
-      try {
-        await login(email, password);
-        window.location.href = '/profile.html';
-      } catch (error) {
-        alert(`Error: ${error.message}`);
-      }
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          alert("Login successful! Welcome, " + user.email);
+          window.location.href = "/profile.html"; // Redirect to the profile page
+        })
+        .catch((error) => {
+          alert(`Error: ${error.message}`);
+        });
     });
 
-    registerButton.addEventListener("click", async (event) => {
+    registerButton.addEventListener("click", function (event) {
       event.preventDefault();
 
       const email = document.getElementById('email').value.trim();
@@ -57,12 +69,14 @@
         return;
       }
 
-      try {
-        await register(email, password);
-        alert("Registration successful! You can now log in.");
-      } catch (error) {
-        alert(`Error: ${error.message}`);
-      }
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          alert("Registration successful! You can now log in.");
+        })
+        .catch((error) => {
+          alert(`Error: ${error.message}`);
+        });
     });
   </script>
 </body>
