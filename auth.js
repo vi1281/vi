@@ -43,25 +43,3 @@ loginButton.addEventListener("click", function (event) {
       alert(`Error: ${error.message}`);
     });
 });
-
-// Event listener for registration
-registerButton.addEventListener("click", function (event) {
-  event.preventDefault();
-
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value.trim();
-
-  if (!email || !password) {
-    alert("Please enter both email and password.");
-    return;
-  }
-
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      alert("Registration successful! You can now log in.");
-    })
-    .catch((error) => {
-      alert(`Error: ${error.message}`);
-    });
-});
