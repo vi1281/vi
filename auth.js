@@ -34,8 +34,10 @@ loginButton.addEventListener("click", function (event) {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      alert("Login successful! Welcome, " + user.email);
-      window.location.href = "/profile.html"; // Redirect to the profile page
+      // Save email to localStorage for home page
+      localStorage.setItem("userEmail", user.email);
+      // Redirect to home page
+      window.location.href = "home.html";
     })
     .catch((error) => {
       alert(`Error: ${error.message}`);
